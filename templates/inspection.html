@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Static Template</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}?ver=8">
+  <script>
+    let score = new Array();
+    let com = new Array();
+    let soll = new Array();
+    function calculation() {
+      for (i = 0; i < 12; i++) {
+        score[i] = $(`input:radio[name="q${i + 1}"]:checked`).val();
+      }
+
+      com[0] = (parseInt(score[0]) + parseInt(score[11])) / 2
+      com[1] = (parseInt(score[1]) + parseInt(score[2]) + parseInt(score[3]) + parseInt(score[4]) + parseInt(score[5])) / 5
+      com[2] = (parseInt(score[6]) + parseInt(score[7]) + parseInt(score[8])) / 3
+      com[3] = (parseInt(score[9]) + parseInt(score[10])) / 2
+      let apphtml = `<div>
+                                <h3>1번 컴포넌트</h3>
+                                <h4>주관적 수면의 질: ${com[0]}</h4>
+                                <h3>2번 컴포넌트</h3>
+                                <h4>수면 잠복: ${com[1]}</h4>
+                                <h3>3번 컴포넌트</h3>
+                                <h4>수면 방해: ${com[2]}</h4>
+                                <h3>4번 컴포넌트</h3>
+                                <h4>낮 기능 장애: ${com[3]}</h4>
+                            </div>`
+      $('#result').append(apphtml)
+      console.log(score[1])
+
+    }
+
+    function listing() {
+      for (i = 0; i < 4; i++) {
+        if (com[i] >= 2) {
+          a = i + 1
+          $.ajax({
+            type: "GET",
+            url: '/getsol?num=' + a,
+            data: {},
+            success: function (response) {
+              if (response['result'] == 'success') {
+                let orders = response['all_orders']
+                for (let i = 0; i < orders.length; i++) {
+                  let solution = orders[i]['solution']
+                  let temp_html = `<tr>
+                                        <td>${solution}</th>
+                                    </tr>`
+                  $('#order-box').append(temp_html)
+                  soll[i] = solution
+                }
+              }
+            }
+          })
+
+        }
+      }
+    }
+
+    function give() {
+      $.ajax({
+        type: "POST",
+        url: "/give",
+        data: JSON.stringify({
+          soll
+        }),
+        contentType: "application/json; charset=utf-8",
+        success: function () {
+          alert('성공')
+        }
+      })
+    }
+  </script>
+  <style>
+    #btn {
+      color: black
+    }
+
+    .table {
+      border-collapse: collapse;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mai">
+    <h1>피츠버그 진단</h1>
+    <div>
+      <div>
+        <h4>
+          1. 지난 한달 동안 잠자기 힘들 때가 있었다면 얼마나 자주 있었나요?
+        </h4>
+        <h5>
+          <input type="radio" name="q1" value=0>전혀 없음 <input type="radio" name="q1" value=1>0~1회 <input type="radio"
+            name="q1" value=2>1~2회 <input type="radio" name="q1" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          2. 30분 이내에 잠들 수 없다.
+        </h4>
+        <h5>
+          <input type="radio" name="q2" value=0>전혀 없음 <input type="radio" name="q2" value=1>0~1회 <input type="radio"
+            name="q2" value=2>1~2회 <input type="radio" name="q2" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          3. 한밤중이나 새벽에 자주 깬다
+        </h4>
+        <h5>
+          <input type="radio" name="q3" value=0>전혀 없음 <input type="radio" name="q3" value=1>0~1회 <input type="radio"
+            name="q3" value=2>1~2회 <input type="radio" name="q3" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          4.화장실에 가려고 일어난다.
+        </h4>
+        <h5>
+          <input type="radio" name="q4" value=0>전혀 없음 <input type="radio" name="q4" value=1>0~1회 <input type="radio"
+            name="q4" value=2>1~2회 <input type="radio" name="q4" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          5.편안하게 숨을 쉴 수 없다.
+        </h4>
+        <h5>
+          <input type="radio" name="q5" value=0>전혀 없음 <input type="radio" name="q5" value=1>0~1회 <input type="radio"
+            name="q5" value=2>1~2회 <input type="radio" name="q5" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          6.기침을 허거나 시끄럽게 코른 곤다.
+        </h4>
+        <h5>
+          <input type="radio" name="q6" value=0>전혀 없음 <input type="radio" name="q6" value=1>0~1회 <input type="radio"
+            name="q6" value=2>1~2회 <input type="radio" name="q6" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          7.너무 춥다.
+        </h4>
+        <h5>
+          <input type="radio" name="q7" value=0>전혀 없음 <input type="radio" name="q7" value=1>0~1회 <input type="radio"
+            name="q7" value=2>1~2회 <input type="radio" name="q7" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          8.너무 덥다.
+        </h4>
+        <h5>
+          <input type="radio" name="q8" value=0>전혀 없음 <input type="radio" name="q8" value=1>0~1회 <input type="radio"
+            name="q8" value=2>1~2회 <input type="radio" name="q8" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          9.통증이 있다.
+        </h4>
+        <h5>
+          <input type="radio" name="q9" value=0>전혀 없음 <input type="radio" name="q9" value=1>0~1회 <input type="radio"
+            name="q9" value=2>1~2회 <input type="radio" name="q9" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          10. 지난 한달 동안 운전을 하거나 식사 또는 <br />
+          사회 활동을 하는 동안 얼마나 자주 졸음을 느꼈는까?
+        </h4>
+        <h5>
+          <input type="radio" name="q10" value=0>전혀 없음 <input type="radio" name="q10" value=1>0~1회 <input type="radio"
+            name="q10" value=2>1~2회 <input type="radio" name="q10" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          11. 지난 한달 동안 일을 할 때 집중할 수 없었는가?
+        </h4>
+        <h5>
+          <input type="radio" name="q11" value=0>전혀 없음 <input type="radio" name="q11" value=1>0~1회 <input type="radio"
+            name="q11" value=2>1~2회 <input type="radio" name="q11" value=3>3회 이상
+        </h5>
+      </div>
+      <div>
+        <h4>
+          12.지난 한달 동안 당신의 전반적인 수면의 질은<br />
+          어느 정도라고 평가하는가?
+        </h4>
+        <h5>
+          <input type="radio" name="q12" value=0>매우 좋음 <input type="radio" name="q12" value=1>좋음 <input type="radio"
+            name="q12" value=2>나쁨
+          <input type="radio" name="q12" value=3>매우 나쁨
+        </h5>
+      </div>
+      <button id="btn" onclick="calculation(); listing(); give();">제출하기</button>
+    </div>
+    <div>
+      <h3>0 : 매우좋음 1 : 좋음 2 : 나쁨 3 : 매우나쁨</h3>
+      <div id="result"></div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">
+              <h1>솔루션 : </h1>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="order-box">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
