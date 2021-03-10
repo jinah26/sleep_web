@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <!-- Webpage Title -->
+  <title>회원가입 페이지</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?ver=6">
+  <script>
+    // 간단한 회원가입 함수입니다.
+    // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+    function register() {
+      $.ajax({
+        type: "POST",
+        url: "/api/register",
+        data: { id_give: $('#userid').val(), pw_give: $('#userpw').val(), nickname_give: $('#usernick').val() },
+        success: function (response) {
+          if (response['result'] == 'success') {
+            alert('회원가입이 완료되었습니다.')
+            window.location.href = '/login'
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+
+  </script>
+  <style>
+    body {
+      background-size: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav id="nav" class="navbar navbar-expand-md navbar-dark fixed-top bg-black"
+      style="padding: 0%; background-color: black;">
+      <a class="nav-link" href="/main">
+        <img src="{{ url_for('static', filename='css/images/logo(black).jpg') }}" width="70px" height="50px" />
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/main">HOME <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="logout()">LOGOUT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/inspection" target="_blank">INSPECTION</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/mypage">MY PAGE</a>
+          </li>
+        </ul>
+        <form class="form-inline mt-2 mt-md-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+            style="height: 44px;">
+          <a id="nav" class="nav-link" href="#">
+            <img src="{{ url_for('static', filename='css/images/search.png') }}" width="31px" height="31px" />
+          </a>
+        </form>
+      </div>
+    </nav>
+  </header>
+  <div id="registerPanel" class="Panel">
+    <h5>For Good Sleep & Life Style</h5>
+    <h1>회원가입</h1>
+  </div>
+  <div>
+
+    <div id="RegisterBox">
+      <h1>회원가입 페이지</h1>
+      <div class="form-group">
+        <label for="userid">ID</label>
+        <input type="text" class="form-control" id="userid" aria-describedby="emailHelp" placeholder="My ID">
+      </div>
+      <div class="form-group">
+        <label for="userpw">PW</label>
+        <input type="password" class="form-control" id="userpw" placeholder="My Password">
+      </div>
+      <div class="form-group">
+        <label for="userpw">NICKNAME</label>
+        <input type="text" class="form-control" id="usernick" placeholder="My Nickname">
+      </div>
+      <button class="btn btn-primary" onclick="register()">회원가입</button>
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <footer class="container">
+    <p class="float-right"><a href="#">Back to top</a></p>
+    <p>© 2017-2020 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+  </footer>
+</body>
+
+</html>
