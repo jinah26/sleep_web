@@ -21,10 +21,9 @@ function load_user_info() {
         data: {},
         success: function (response) {
             if (response['result'] == 'success') {
-                // 올바른 결과값을 받으면 nickname을 입력해줍니다.
+                // 올바른 결과값을 받으면 nickname을 입력
                 $('#nickname').text(response['nickname'])
             } else {
-                // 에러가 나면 메시지를 띄우고 로그인 창으로 이동합니다.
                 alert(response['msg'])
                 window.location.href = '/login'
             }
@@ -32,7 +31,6 @@ function load_user_info() {
     })
 }
 
-// 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
 function logout() {
     $.removeCookie('mytoken');
     alert('로그아웃!')
@@ -43,12 +41,9 @@ function logout() {
 
 $(document).ready(function () {
 
-
-
     listing()
 
 });
-
 
 
 function listing() {

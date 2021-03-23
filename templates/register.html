@@ -26,8 +26,8 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?ver=6">
   <script>
-    // 간단한 회원가입 함수입니다.
-    // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
+
+    // 아이디, 비밀번호, 닉네임을 받아 DB에 저장.
     function register() {
       $.ajax({
         type: "POST",
